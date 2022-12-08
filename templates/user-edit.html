@@ -13,8 +13,15 @@ content %}
   <label for="image-url">Image URL</label>
   <input type="text" name="image-url" value="{{ user.image_url }}" />
 
-  <a href="/users/{{ user.id }}"></a>
-  <button type="submit">Save</button>
+  <button
+    class="cancel"
+    type="submit"
+    formmethod="get"
+    formaction="/users/{{ user.id }}"
+  >
+    Cancel
+  </button>
+  <button class="submit" type="submit">Save</button>
 </form>
 
 {% endblock %}

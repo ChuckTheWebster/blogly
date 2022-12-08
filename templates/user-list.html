@@ -1,6 +1,8 @@
 {% extends 'base.html' %} {% block title %} Blogly Users List {% endblock %} {%
 block content %}
 
+<h1>Users</h1>
+
 <ul>
   {% for user in users %}
 
@@ -13,6 +15,8 @@ block content %}
   {% endfor %}
 </ul>
 
-<a href="/users/new">Add User</a>
+<form action="/users/new">
+  <button class="add" type="submit">Add User</button>
+</form>
 
 {% endblock %}

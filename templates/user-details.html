@@ -1,14 +1,21 @@
 {% extends 'base.html' %} {% block title %} Blogly User Details {% endblock %}
 {% block content %}
 
-<img src="{{ user.image_url }}" alt="{{ user.first_name }}" />
 <h1>{{ user.first_name }} {{ user.last_name }}</h1>
-<!-- Make these into buttons later -->
-<form action="/users/{{ user.id }}/edit">
-  <button type="submit">Edit</button>
-</form>
-<form action="/users/{{ user.id }}/delete" method="POST">
-  <button type="submit">Delete</button>
-</form>
+<img src="{{ user.image_url }}" alt="{{ user.first_name }}" /> <br />
+
+<div class="details">
+  <form action="/users/{{ user.id }}/edit">
+    <button class="edit" type="submit">Edit</button>
+    <button
+      class="delete"
+      type="submit"
+      formaction="/users/{{ user.id }}/delete"
+      formmethod="post"
+    >
+      Delete
+    </button>
+  </form>
+</div>
 
 {% endblock %}

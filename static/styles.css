@@ -1,0 +1,55 @@
+form {
+  width: 500px;
+}
+
+input {
+  margin-bottom: 10px;
+}
+
+input[type="text"] {
+  width: 100%;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+.details {
+  display: inline-block;
+}
+
+button {
+  border-radius: 5px;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+button.add {
+  color: white;
+  background-color: #6c757d;
+}
+
+button.submit {
+  color: white;
+  background-color: #28a745;
+  float: right;
+}
+
+button.edit {
+  color: white;
+  background-color: #007cff;
+}
+
+button.delete {
+  color: white;
+  background-color: #dc3545;
+}
+
+button.cancel {
+  color: #90cdd9;
+  border: solid #90cdd9 1px;
+  background-color: white;
+}
+
+img {
+  width: 200px;
+  height: auto;
+}
