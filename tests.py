@@ -57,76 +57,84 @@ class UserViewTestCase(TestCase):
         # value of their id, since it will change each time our tests are run.
         self.user_id = test_user.id
 
-    # WORKING ONNNNN
     def test_user_list(self):
-        with app.test_client as client:
-            response = client.get('/users')
-            html = response.get_(as_text=True)
+        """Tests if test user shows up on user list."""
+        with self.client as client:
+            response = client.get("/users")
+            html = response.get_data(as_text=True)
 
-            user = User.query.get(1)
+            user = User.query.get(self.user_id)
             first_name = user.first_name
             last_name = user.last_name
 
-            self.assert_Equal(response.status_code, 200)
-            self.assertIn(f'{first_name} {last_name}', html)
-
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(f"{first_name} {last_name}", html)
 
     def test_user_add_form(self):
-        with app.test_client() as client:
-            response = client.get('/users/new')
+        """Tests if new user form loads properly."""
+        with self.client as client:
+            response = client.get("/users/new")
             html = response.get_data(as_text=True)
 
             self.assertEqual(response.status_code, 200)
-            self.assertIn('<form', html)
-
+            self.assertIn("<form", html)
 
     def test_user_add_submit(self):
-        with app.test_client() as client:
-            response = client.post('/users/new',
-                                    data={'first_name': 'Foo',
-                                    'last_name': 'Bar'}, follow_redirects=True)
+        """Tests if submitting new dummy user updates users list."""
+        with self.client as client:
+            response = client.post(
+                "/users/new",
+                data={"first-name": "Foo", "last-name": "Bar"},
+                follow_redirects=True,
+            )
             html = response.get_data(as_text=True)
 
             self.assertEqual(response.status_code, 200)
-            self.assertIn('Foo', html)
-
+            self.assertIn("Foo", html)
 
     def test_user_edit_submit(self):
-        with app.test_client() as client:
-            response = client.post('/users/1',
-                                    data={'first_name': 'Big',
-                                    'last_name': 'Mike'}, follow_redirects=True)
+        """Tests if editing test users reflect on the users list."""
+        with self.client as client:
+            response = client.post(
+                f"/users/{self.user_id}/edit",
+                data={
+                    "first-name": "Big",
+                    "last-name": "Mike",
+                    "image-url": DEFAULT_IMAGE_URL,
+                },
+                follow_redirects=True,
+            )
             html = response.get_data(as_text=True)
 
             self.assertEqual(response.status_code, 200)
-            self.assertIn('Big', html)
-
+            self.assertIn("Big Mike", html)
 
     def test_redirection(self):
-        with app.test_client as client:
-            response = client.get('/')
+        """Tests if redirections are working and rediction location is correct."""
+        with self.client as client:
+            response = client.get("/")
 
             self.assertEqual(response.status_code, 302)
             self.assertEqual(response.location, "/users")
 
-
     def test_redirection_followed(self):
-        with app.test_client() as client:
-            response = client.get("/", follows_redirects=True)
+        """Tests if redirections end up directing to a valid page."""
+        with self.client as client:
+            response = client.get("/", follow_redirects=True)
             html = response.get_data(as_text=True)
 
             self.assertEqual(response.status_code, 200)
-            self.assertIn('<button', html)
-
+            self.assertIn("<button", html)
 
     def tearDown(self):
         """Clean up any fouled transaction."""
         db.session.rollback()
 
-    def test_list_users(self):
-        with self.client as c:
-            resp = c.get("/users")
-            self.assertEqual(resp.status_code, 200)
-            html = resp.get_data(as_text=True)
-            self.assertIn("test1_first", html)
-            self.assertIn("test1_last", html)
+    # def test_list_users(self):
+    #     """Tests if the test users are in the users list."""
+    #     with self.client as c:
+    #         resp = c.get("/users")
+    #         self.assertEqual(resp.status_code, 200)
+    #         html = resp.get_data(as_text=True)
+    #         self.assertIn("test1_first", html)
+    #         self.assertIn("test1_last", html)

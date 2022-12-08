@@ -49,7 +49,7 @@ def add_users():
     first_name = request.form["first-name"]
     last_name = request.form["last-name"]
     image_url = request.form.get("image-url")
-    if image_url == "":
+    if image_url == "" or image_url is None:
         image_url = DEFAULT_IMAGE_URL
 
     user = User(first_name=first_name, last_name=last_name, image_url=image_url)
@@ -57,7 +57,7 @@ def add_users():
     db.session.add(user)
     db.session.commit()
 
-    return redirect("/")
+    return redirect("/users")
 
 
 @app.get("/users/<int:user_id>")
@@ -94,7 +94,7 @@ def update_user(user_id):
     db.session.add(user)
     db.session.commit()
 
-    return redirect("/")
+    return redirect("/users")
 
 
 @app.post("/users/<int:user_id>/delete")
@@ -104,4 +104,4 @@ def delete_user(user_id):
     # user = User.query.get_or_404(user_id)
     # user.query.delete()
     db.session.commit()
-    return redirect("/")
+    return redirect("/users")

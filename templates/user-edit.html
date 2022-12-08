@@ -1,27 +1,53 @@
 {% extends 'base.html' %} {% block title %} Edit User {% endblock %} {% block
 content %}
 
-<h1>Edit a user</h1>
+<div class="container-fluid">
+  <h1>Edit a user</h1>
 
-<form id="edit-user" method="post">
-  <label for="first-name">First Name</label>
-  <input type="text" name="first-name" value="{{ user.first_name }}" required />
+  <form id="edit-user" method="post">
+    <div class="form-group">
+      <label for="first-name">First Name</label>
+      <input
+        class="form-control"
+        type="text"
+        name="first-name"
+        value="{{ user.first_name }}"
+        required
+      />
+    </div>
 
-  <label for="last-name">Last Name</label>
-  <input type="text" name="last-name" value="{{ user.last_name }}" required />
+    <div class="form-group">
+      <label for="last-name">Last Name</label>
+      <input
+        class="form-control"
+        type="text"
+        name="last-name"
+        value="{{ user.last_name }}"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="image-url">Image URL</label>
+      <input
+        class="form-control"
+        type="text"
+        name="image-url"
+        value="{{ user.image_url }}"
+      />
+    </div>
 
-  <label for="image-url">Image URL</label>
-  <input type="text" name="image-url" value="{{ user.image_url }}" />
-
-  <button
-    class="cancel"
-    type="submit"
-    formmethod="get"
-    formaction="/users/{{ user.id }}"
-  >
-    Cancel
-  </button>
-  <button class="submit" type="submit">Save</button>
-</form>
+    <div class="text-end mt-1">
+      <button
+        class="btn btn-outline-primary"
+        type="submit"
+        formmethod="get"
+        formaction="/users/{{ user.id }}"
+      >
+        Cancel
+      </button>
+      <button class="btn btn-success" type="submit">Save</button>
+    </div>
+  </form>
+</div>
 
 {% endblock %}
