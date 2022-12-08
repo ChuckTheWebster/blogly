@@ -2,7 +2,7 @@
 
 from flask import Flask, redirect, render_template, request
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User, DEFAULT_IMAGE_URL
+from models import db, connect_db, User, DEFAULT_IMAGE_URL, Post
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///blogly"
@@ -63,7 +63,9 @@ def show_user(user_id):
     """Shows detailed information about a specific user."""
 
     user = User.query.get_or_404(user_id)
-    return render_template("user-details.html", user=user)
+    posts = user.posts
+
+    return render_template("user-details.html", user=user, posts=posts)
 
 
 @app.get("/users/<int:user_id>/edit")
@@ -101,3 +103,32 @@ def delete_user(user_id):
     User.query.filter(User.id == user_id).delete()
     db.session.commit()
     return redirect("/users")
+
+
+@app.get('/users/<int:user_id>/posts/new')
+def new_post(user_id):
+    """Displays form for user to add a new post"""
+
+    user = User.query.get_or_404(user_id)
+
+    return render_template("new-post.html", user=user)
+
+@app.post('/users/<int:user_id>/posts/new')
+def add_post(user_id):
+    """Adds new post for current user id"""
+
+    title = request.form['title']
+    content = request.form['content']
+
+    post = Post(title=title, content=content, user_id=user_id)
+
+    db.session.add(post)
+    db.session.commit()
+
+    return redirect(f"/users/{user_id}")
+
+
+
+# 1. Submit a few posts with what we just built
+# 2. Edit old route & html (user details) and populate with posts
+

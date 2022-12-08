@@ -1,0 +1,37 @@
+{% extends 'base.html' %} {% block title %} Create a User {% endblock %} {%
+  block content %}
+
+  <div class="container-fluid">
+    <h1>Add Post for {{ first_name }} {{ last_name }}</h1>
+    <form id="add-post" action="/users/{{ user.id }}/posts/new" method="POST">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input
+          class="form-control"
+          type="text"
+          name="title"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="last-name">Last Name</label>
+        <textarea
+          class="form-control"
+          rows="2"
+          name="content"
+          required></textarea>
+
+      </div>
+
+      <div class="text-end mt-1">
+        <button class="btn btn-info" type="submit" formmethod="get" formaction="/users/{{ user.id }}">Cancel</button>
+      </div>
+      <div class="text-end mt-1">
+        <button class="btn btn-success" type="submit">Add</button>
+      </div>
+    </form>
+  </div>
+  {% endblock %}
+
+
