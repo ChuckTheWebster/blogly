@@ -1,10 +1,14 @@
-{% extends 'base.html' %} {% title block %} Blogly Users List {% endblock %} {%
-content block %}
+{% extends 'base.html' %} {% block title %} Blogly Users List {% endblock %} {%
+block content %}
 
 <ul>
   {% for user in users %}
 
-  <li><a href="/{{ user.id }}"> {{ user.first_name }}</a></li>
+  <li>
+    <a href="/users/{{ user.id }}"
+      >{{ user.first_name }} {{ user.last_name }}</a
+    >
+  </li>
 
   {% endfor %}
 </ul>

@@ -1,9 +1,9 @@
-{% extends 'base.html' %} {% title block %} Create a User {% endblock %} {%
-content block %}
+{% extends 'base.html' %} {% block title %} Create a User {% endblock %} {%
+block content %}
 
 <h1>Create a User</h1>
 
-<form id="add-user" action="/users" method="post">
+<form id="add-user" action="/users/new" method="POST">
   <label for="first-name">First Name</label>
   <input
     type="text"

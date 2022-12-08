@@ -2,7 +2,7 @@
 
 from flask import Flask, redirect, render_template, request
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User
+from models import db, connect_db, User, DEFAULT_IMAGE_URL
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///blogly"
@@ -34,7 +34,7 @@ def list_users():
 @app.get("/users/new")
 def add_users_form():
 
-    return render_template("users-add.html")
+    return render_template("user-add.html")
 
 
 @app.post("/users/new")
@@ -42,14 +42,16 @@ def add_users():
 
     first_name = request.form["first-name"]
     last_name = request.form["last-name"]
-    image_url = request.form.get("image-url", None)
+    image_url = request.form.get("image-url")
+    if image_url == "":
+        image_url = DEFAULT_IMAGE_URL
 
-    user = User(first_name, last_name, image_url)
+    user = User(first_name=first_name, last_name=last_name, image_url=image_url)
 
     db.session.add(user)
     db.session.commit()
 
-    return render_template("user-list.html")
+    return redirect("/")
 
 
 @app.get("/users/<int:user_id>")
@@ -67,7 +69,7 @@ def edit_user(user_id):
 
 
 @app.post("/users/<int:user_id>/edit")
-def delete_user(user_id):
+def update_user(user_id):
 
     first_name = request.form["first-name"]
     last_name = request.form["last-name"]
@@ -81,11 +83,13 @@ def delete_user(user_id):
     db.session.add(user)
     db.session.commit()
 
-    return render_template("user-list.html")
+    return redirect("/")
 
 
-@app.get("/users/<int:user_id>/delete")
+@app.post("/users/<int:user_id>/delete")
 def delete_user(user_id):
-    user = User.query.get_or_404(user_id)
-    user.query.delete()
-    return render_template("user-list.html")
+    User.query.filter(User.id == user_id).delete()
+    # user = User.query.get_or_404(user_id)
+    # user.query.delete()
+    db.session.commit()
+    return redirect("/")
