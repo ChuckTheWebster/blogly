@@ -13,6 +13,8 @@ def connect_db(app):
 
 
 class User(db.Model):
+    """User class for users table in database."""
+
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

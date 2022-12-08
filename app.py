@@ -19,12 +19,14 @@ db.create_all()
 
 @app.get("/")
 def homepage():
+    """Redirects to list of users in database."""
 
     return redirect("/users")
 
 
 @app.get("/users")
 def list_users():
+    """Populates page with list of all users in database."""
 
     users = User.query.all()
 
@@ -33,12 +35,16 @@ def list_users():
 
 @app.get("/users/new")
 def add_users_form():
+    """Shows a form to add a new user."""
 
     return render_template("user-add.html")
 
 
 @app.post("/users/new")
 def add_users():
+    """Grabs information from form and submits new user to database
+    and redirects to users list.
+    """
 
     first_name = request.form["first-name"]
     last_name = request.form["last-name"]
@@ -56,6 +62,7 @@ def add_users():
 
 @app.get("/users/<int:user_id>")
 def show_user(user_id):
+    """Shows detailed information about a specific user."""
 
     user = User.query.get_or_404(user_id)
     return render_template("user-details.html", user=user)
@@ -63,6 +70,7 @@ def show_user(user_id):
 
 @app.get("/users/<int:user_id>/edit")
 def edit_user(user_id):
+    """Shows edit form for a specific user."""
 
     user = User.query.get_or_404(user_id)
     return render_template("user-edit.html", user=user)
@@ -70,6 +78,9 @@ def edit_user(user_id):
 
 @app.post("/users/<int:user_id>/edit")
 def update_user(user_id):
+    """Grabs information from form and updates the current user's information
+    in the database, then redirects to users list.
+    """
 
     first_name = request.form["first-name"]
     last_name = request.form["last-name"]
@@ -88,6 +99,7 @@ def update_user(user_id):
 
 @app.post("/users/<int:user_id>/delete")
 def delete_user(user_id):
+    """Deletes the current user from the database and redirects to the users list."""
     User.query.filter(User.id == user_id).delete()
     # user = User.query.get_or_404(user_id)
     # user.query.delete()
