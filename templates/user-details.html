@@ -1,0 +1,10 @@
+{% extends 'base.html' %} {% title block %} Blogly User Details {% endblock %}
+{% content block %}
+
+<img src="{{ user.image_url }}" alt="{{ user.first_name }}" />
+<h1>{{ user.first_name }} {{ user.last_name }}</h1>
+<!-- Make these into buttons later -->
+<a href="/users/{{ user.id }}/edit">Edit</a>
+<a href="/users/{{ user.id }}/delete">Delete</a>
+
+{% endblock %}
