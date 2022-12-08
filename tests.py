@@ -28,6 +28,7 @@ class UserViewTestCase(TestCase):
     def setUp(self):
         """Create test client, add sample data."""
 
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         # As you add more models later in the exercise, you'll want to delete
         # all of their records before each test just as we're doing with the
         # User model below.
@@ -55,6 +56,68 @@ class UserViewTestCase(TestCase):
         # rely on this user in our tests without needing to know the numeric
         # value of their id, since it will change each time our tests are run.
         self.user_id = test_user.id
+
+    # WORKING ONNNNN
+    def test_user_list(self):
+        with app.test_client as client:
+            response = client.get('/users')
+            html = response.get_(as_text=True)
+
+            user = User.query.get(1)
+            first_name = user.first_name
+            last_name = user.last_name
+
+            self.assert_Equal(response.status_code, 200)
+            self.assertIn(f'{first_name} {last_name}', html)
+
+
+    def test_user_add_form(self):
+        with app.test_client() as client:
+            response = client.get('/users/new')
+            html = response.get_data(as_text=True)
+
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('<form', html)
+
+
+    def test_user_add_submit(self):
+        with app.test_client() as client:
+            response = client.post('/users/new',
+                                    data={'first_name': 'Foo',
+                                    'last_name': 'Bar'}, follow_redirects=True)
+            html = response.get_data(as_text=True)
+
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('Foo', html)
+
+
+    def test_user_edit_submit(self):
+        with app.test_client() as client:
+            response = client.post('/users/1',
+                                    data={'first_name': 'Big',
+                                    'last_name': 'Mike'}, follow_redirects=True)
+            html = response.get_data(as_text=True)
+
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('Big', html)
+
+
+    def test_redirection(self):
+        with app.test_client as client:
+            response = client.get('/')
+
+            self.assertEqual(response.status_code, 302)
+            self.assertEqual(response.location, "/users")
+
+
+    def test_redirection_followed(self):
+        with app.test_client() as client:
+            response = client.get("/", follows_redirects=True)
+            html = response.get_data(as_text=True)
+
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('<button', html)
+
 
     def tearDown(self):
         """Clean up any fouled transaction."""
