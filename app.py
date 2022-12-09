@@ -121,9 +121,9 @@ def add_post(user_id):
     title = request.form["title"]
     content = request.form["content"]
 
-    post = Post(title=title, content=content, user_id=user_id)
-
-    db.session.add(post)
+    # Can append the post to the user using relationships
+    user = User.query.get_or_404(user_id)
+    user.posts.append(Post(title=title, content=content))
     db.session.commit()
 
     return redirect(f"/users/{user_id}")
@@ -171,7 +171,6 @@ def delete_post(post_id):
     of the user associated with the current post.
     """
     post = Post.query.get_or_404(post_id)
-    user_id = post.users.id
     Post.query.filter(Post.id == post_id).delete()
     db.session.commit()
-    return redirect(f"/users/{user_id}")
+    return redirect(f"/users/{post.user_id}")
