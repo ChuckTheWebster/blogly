@@ -1,0 +1,40 @@
+{% extends 'base.html' %} {% block title %} Edit Post {% endblock %} {% block
+content %}
+
+<div class="container-fluid">
+  <h1>Edit Post</h1>
+  <form id="edit-post" method="POST">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input
+        class="form-control"
+        type="text"
+        name="title"
+        value="{{ post.title }}"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="content">Content</label>
+      <textarea class="form-control" rows="2" name="content" required>
+{{ post.content }}</textarea
+      >
+    </div>
+
+    <div class="text-end mt-1">
+      <button
+        class="btn btn-outline-primary"
+        type="submit"
+        formmethod="get"
+        formaction="/users/{{ post.users.id }}"
+        formnovalidate
+      >
+        Cancel
+      </button>
+      <button class="btn btn-success" type="submit">Edit</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

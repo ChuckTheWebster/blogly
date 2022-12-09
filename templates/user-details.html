@@ -24,21 +24,22 @@
             Delete
           </button>
         </form>
-      </div>
         <h1>Posts</h1>
-
         <ul>
           {% for post in posts %}
-          <li><a href="/" class="link-primary text-decoration-none">{{ post.title }}</a></li>
+          <li>
+            <a
+              href="/posts/{{ post.id }}"
+              class="link-primary text-decoration-none"
+              >{{ post.title }}</a
+            >
+          </li>
           {% endfor %}
         </ul>
-
         <form action="/users/{{ user.id }}/posts/new">
           <button class="btn btn-primary" type="submit">Add Post</button>
         </form>
-
-
-
+      </div>
     </div>
   </div>
 </div>

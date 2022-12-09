@@ -1,0 +1,37 @@
+{% extends 'base.html' %} {% block title %} Post Details {% endblock %} {% block
+content %}
+
+<div class="container-fluid">
+  <h1>{{ post.title }}</h1>
+  <p>{{ post.content }}</p>
+  <p>
+    <em>By {{ post.users.first_name }} {{post.users.last_name}}</em>
+  </p>
+
+  <form action="/posts/{{ post.id }}/edit" method="post">
+    <button
+      class="btn btn-outline-primary"
+      type="submit"
+      formaction="/users/{{ post.users.id }}"
+      formmethod="get"
+    >
+      Cancel
+    </button>
+    <button
+      class="btn btn-primary"
+      type="submit"
+      formaction="/posts/{{ post.id }}/edit"
+      formmethod="get"
+    >
+      Edit
+    </button>
+    <button
+      class="btn btn-danger"
+      type="submit"
+      formaction="/posts/{{ post.id }}/delete"
+    >
+      Delete
+    </button>
+  </form>
+</div>
+{% endblock %}

@@ -86,7 +86,7 @@ def update_user(user_id):
     last_name = request.form["last-name"]
     image_url = request.form.get("image-url", DEFAULT_IMAGE_URL)
 
-    user = User.query.get(user_id)
+    user = User.query.get_or_404(user_id)
     user.first_name = first_name
     user.last_name = last_name
     user.image_url = image_url
@@ -105,20 +105,21 @@ def delete_user(user_id):
     return redirect("/users")
 
 
-@app.get('/users/<int:user_id>/posts/new')
+@app.get("/users/<int:user_id>/posts/new")
 def new_post(user_id):
     """Displays form for user to add a new post"""
 
     user = User.query.get_or_404(user_id)
 
-    return render_template("new-post.html", user=user)
+    return render_template("post-new.html", user=user)
 
-@app.post('/users/<int:user_id>/posts/new')
+
+@app.post("/users/<int:user_id>/posts/new")
 def add_post(user_id):
     """Adds new post for current user id"""
 
-    title = request.form['title']
-    content = request.form['content']
+    title = request.form["title"]
+    content = request.form["content"]
 
     post = Post(title=title, content=content, user_id=user_id)
 
@@ -128,7 +129,35 @@ def add_post(user_id):
     return redirect(f"/users/{user_id}")
 
 
+@app.get("/posts/<int:post_id>")
+def show_post(post_id):
 
-# 1. Submit a few posts with what we just built
-# 2. Edit old route & html (user details) and populate with posts
+    post = Post.query.get_or_404(post_id)
 
+    return render_template("post-details.html", post=post)
+
+
+@app.get("/posts/<int:post_id>/edit")
+def edit_post(post_id):
+    """Shows edit form for a specific post."""
+
+    post = Post.query.get_or_404(post_id)
+    return render_template("post-edit.html", post=post)
+
+
+@app.post("/posts/<int:post_id>/edit")
+def update_post(post_id):
+
+    title = request.form["title"]
+    content = request.form["content"]
+
+    post = Post.query.get_or_404(post_id)
+    post.title = title
+    post.content = content
+
+    db.session.add(post)
+    db.session.commit()
+
+    return redirect(f"/posts/{post_id}")
+
+@app.post("/posts/<post.id>/delete")
