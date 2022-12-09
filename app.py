@@ -131,6 +131,7 @@ def add_post(user_id):
 
 @app.get("/posts/<int:post_id>")
 def show_post(post_id):
+    """Shows a specific post."""
 
     post = Post.query.get_or_404(post_id)
 
@@ -147,6 +148,9 @@ def edit_post(post_id):
 
 @app.post("/posts/<int:post_id>/edit")
 def update_post(post_id):
+    """Grabs information from form and updates the current post's information
+    in the database, then redirects to the associated user's posts list.
+    """
 
     title = request.form["title"]
     content = request.form["content"]
@@ -160,4 +164,14 @@ def update_post(post_id):
 
     return redirect(f"/posts/{post_id}")
 
-@app.post("/posts/<post.id>/delete")
+
+@app.post("/posts/<int:post_id>/delete")
+def delete_post(post_id):
+    """Deletes the current post from the database and redirects to the page
+    of the user associated with the current post.
+    """
+    post = Post.query.get_or_404(post_id)
+    user_id = post.users.id
+    Post.query.filter(Post.id == post_id).delete()
+    db.session.commit()
+    return redirect(f"/users/{user_id}")
